@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0d10">
+  <meta name="description" content="Minecraft-inspirierter Aim Trainer für Flicks, Tracking und Reaktion.">
+  <title>Away Aim Trainer</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="game.css">
+</head>
+<body>
+  <div id="gameCanvas" class="arena">
+    <button id="practiceTarget" class="practice-target" aria-label="Ziel">
+      <span class="target-eye left"></span><span class="target-eye right"></span>
+      <span class="target-mouth m1"></span><span class="target-mouth m2"></span><span class="target-mouth m3"></span>
+    </button>
+  </div>
+  <div class="vignette"></div><div class="scanlines"></div>
+
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">A</span><div><strong>AWAY AIM</strong><small>MINECRAFT TRAINER</small></div></div>
+    <div class="top-actions"><span class="status-dot"></span><span>LOCAL • NO LOGIN</span></div>
+  </header>
+
+  <main id="menu" class="screen menu-screen visible">
+    <section class="hero-panel panel">
+      <div class="eyebrow">MINECRAFT AIM LAB // v1.0</div>
+      <h1>TRAIN YOUR<br><span>AIM.</span></h1>
+      <p>Flicks, Reaktion und Tracking im Minecraft-Style trainieren. Direkt im Browser, ohne Download.</p>
+      <div class="mode-grid">
+        <button class="mode-card selected" data-mode="flick"><span class="mode-number">01</span><strong>FLICK</strong><small>Block anklicken → sofort neue Position. Schnell und präzise reagieren.</small><span class="mode-tag">PRECISION</span></button>
+        <button class="mode-card" data-mode="strafe"><span class="mode-number">02</span><strong>STRAFE</strong><small>Das Ziel bewegt sich dauerhaft links und rechts und wird schneller.</small><span class="mode-tag">TRACKING</span></button>
+        <button class="mode-card" data-mode="combo"><span class="mode-number">03</span><strong>COMBO</strong><small>Das Ziel bewegt sich frei durch die Arena. Jede Serie erhöht den Speed.</small><span class="mode-tag">REACTION</span></button>
+      </div>
+      <button id="startButton" class="primary-button"><span>START TRAINING</span><kbd>CLICK</kbd></button>
+      <div class="start-hint">ESC = Pause • Ziel anklicken = Punkt • Daneben klicken = Miss</div>
+    </section>
+
+    <aside class="settings-panel panel">
+      <div class="panel-heading"><span>SETTINGS</span><span class="mini-label">MC STYLE</span></div>
+      <label class="setting"><div><span>Movement Speed</span><output id="speedValue">100%</output></div><input id="speed" type="range" min="50" max="200" value="100"><small>Wie schnell bewegliche Ziele sind.</small></label>
+      <label class="setting"><div><span>Target Lifetime</span><output id="lifetimeValue">2.5s</output></div><input id="lifetime" type="range" min="10" max="40" value="25"><small>Nur Flick: wann ein Ziel automatisch weiterspringt.</small></label>
+      <label class="setting"><div><span>Target Größe</span><output id="targetSizeValue">100%</output></div><input id="targetSize" type="range" min="65" max="150" value="100"></label>
+      <label class="setting"><div><span>Session</span><output id="durationValue">60s</output></div><input id="duration" type="range" min="15" max="120" step="15" value="60"></label>
+      <div class="best-box"><div><span>PERSONAL BEST</span><small id="bestMode">FLICK</small></div><strong id="bestScore">0</strong></div>
+    </aside>
+  </main>
+
+  <section id="hud" class="hud" aria-hidden="true">
+    <div class="hud-top">
+      <div class="hud-stat"><small>SCORE</small><strong id="hudScore">0</strong></div>
+      <div class="hud-stat"><small>ACCURACY</small><strong id="hudAccuracy">100%</strong></div>
+      <div class="hud-stat"><small>CPS</small><strong id="hudCps">0.0</strong></div>
+      <div class="hud-mode"><small>MODE</small><strong id="hudMode">FLICK</strong></div>
+      <div class="hud-stat time"><small>TIME</small><strong id="hudTime">60.0</strong></div>
+    </div>
+    <div class="game-feed"><span id="streakText">STREAK ×0</span><span id="reactionText">REACTION —</span></div>
+  </section>
+
+  <section id="pauseScreen" class="overlay-card" aria-hidden="true">
+    <div class="pause-card panel"><div class="eyebrow">TRAINING PAUSED</div><h2>PAUSE</h2><p>Deine Zeit läuft nicht weiter.</p><button id="resumeButton" class="primary-button">RESUME</button><button id="quitButton" class="ghost-button">BACK TO MENU</button></div>
+  </section>
+
+  <section id="resultsScreen" class="overlay-card" aria-hidden="true">
+    <div class="results-card panel">
+      <div class="eyebrow">SESSION COMPLETE</div><h2>RESULTS</h2><div class="grade" id="resultGrade">A</div>
+      <div class="results-grid">
+        <div><small>SCORE</small><strong id="resultScore">0</strong></div><div><small>ACCURACY</small><strong id="resultAccuracy">0%</strong></div>
+        <div><small>TARGETS</small><strong id="resultHits">0</strong></div><div><small>BEST STREAK</small><strong id="resultStreak">0</strong></div>
+        <div><small>AVG REACTION</small><strong id="resultReaction">—</strong></div><div><small>AVG CPS</small><strong id="resultCps">0.0</strong></div>
+      </div>
+      <div id="newBest" class="new-best">NEW PERSONAL BEST</div>
+      <div class="result-actions"><button id="retryButton" class="primary-button">RUN IT BACK</button><button id="menuButton" class="ghost-button">MENU</button></div>
+    </div>
+  </section>
+
+  <script src="state.js"></script>
+  <script src="settings.js"></script>
+  <script src="core.js"></script>
+  <script src="target-events.js"></script>
+  <script src="controls.js"></script>
+  <script src="results.js"></script>
+  <script src="loop.js"></script>
+</body>
+</html>
