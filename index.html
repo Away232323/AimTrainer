@@ -1,87 +1,127 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0b0d10">
-  <meta name="description" content="Minecraft-inspirierter Aim Trainer für Flicks, Tracking und Reaktion.">
-  <title>Away Aim Trainer</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#06070b">
+  <meta name="description" content="Away Aim — Minecraft Aim Trainer mit Ranked System, Accounts und globalem Leaderboard.">
+  <title>Away Aim — Ranked Minecraft Aim Trainer</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="game.css">
 </head>
 <body>
-  <div id="gameCanvas" class="arena">
-    <button id="practiceTarget" class="practice-target" aria-label="Ziel">
-      <span class="target-eye left"></span><span class="target-eye right"></span>
-      <span class="target-mouth m1"></span><span class="target-mouth m2"></span><span class="target-mouth m3"></span>
-    </button>
-  </div>
-  <div class="vignette"></div><div class="scanlines"></div>
+  <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div><div class="noise"></div>
 
-  <header class="topbar">
-    <div class="brand"><span class="brand-mark">A</span><div><strong>AWAY AIM</strong><small>MINECRAFT TRAINER</small></div></div>
-    <div class="top-actions"><span class="status-dot"></span><span>LOCAL • NO LOGIN</span></div>
+  <header class="site-header">
+    <a class="brand" href="#" data-nav="train" aria-label="Away Aim Home">
+      <span class="brand-cube"><i></i><i></i><i></i></span>
+      <span><b>AWAY AIM</b><small>RANKED MINECRAFT AIM LAB</small></span>
+    </a>
+    <nav class="nav-tabs" aria-label="Hauptnavigation">
+      <button class="nav-btn active" data-nav="train">TRAIN</button>
+      <button class="nav-btn" data-nav="leaderboard">LEADERBOARD</button>
+      <button class="nav-btn" data-nav="ranks">RANKS</button>
+    </nav>
+    <div class="header-actions">
+      <div id="miniRank" class="mini-rank guest"><span class="rank-gem copper"></span><span><small>DEIN RANK</small><b id="miniRankName">Copper I</b></span></div>
+      <button id="authButton" class="account-button"><span class="avatar-dot">G</span><span id="authButtonLabel">ACCOUNT</span></button>
+    </div>
   </header>
 
-  <main id="menu" class="screen menu-screen visible">
-    <section class="hero-panel panel">
-      <div class="eyebrow">MINECRAFT AIM LAB // v1.0</div>
-      <h1>TRAIN YOUR<br><span>AIM.</span></h1>
-      <p>Flicks, Reaktion und Tracking im Minecraft-Style trainieren. Direkt im Browser, ohne Download.</p>
-      <div class="mode-grid">
-        <button class="mode-card selected" data-mode="flick"><span class="mode-number">01</span><strong>FLICK</strong><small>Block anklicken → sofort neue Position. Schnell und präzise reagieren.</small><span class="mode-tag">PRECISION</span></button>
-        <button class="mode-card" data-mode="strafe"><span class="mode-number">02</span><strong>STRAFE</strong><small>Das Ziel bewegt sich dauerhaft links und rechts und wird schneller.</small><span class="mode-tag">TRACKING</span></button>
-        <button class="mode-card" data-mode="combo"><span class="mode-number">03</span><strong>COMBO</strong><small>Das Ziel bewegt sich frei durch die Arena. Jede Serie erhöht den Speed.</small><span class="mode-tag">REACTION</span></button>
+  <main class="shell">
+    <section id="view-train" class="view active">
+      <div class="dashboard-grid">
+        <section class="hero-card glass-card">
+          <div class="hero-copy">
+            <div class="kicker"><span class="live-dot"></span> SEASON 01 • RANKED LIVE</div>
+            <h1>BUILD <span>REAL</span><br>AIM.</h1>
+            <p>Flicks, Tracking, Micro-Adjustments und Reaktion — mit einem echten Progress-System statt nur einem Timer.</p>
+            <div class="hero-actions">
+              <button id="quickStart" class="primary-btn"><span>START TRAINING</span><kbd>ENTER</kbd></button>
+              <button class="secondary-btn" data-nav="leaderboard">GLOBAL TOP 100</button>
+            </div>
+            <div class="hero-meta">
+              <span><b id="heroTier">Copper I</b><small>AKTUELLER TIER</small></span>
+              <span><b id="heroRp">0 RP</b><small>RATING POINTS</small></span>
+              <span><b id="heroSessions">0</b><small>SESSIONS</small></span>
+            </div>
+          </div>
+          <div class="rank-orbit-wrap">
+            <div class="rank-orbit"></div>
+            <div id="heroBadge" class="rank-badge copper">
+              <span class="badge-wings left"></span><span class="badge-wings right"></span>
+              <span class="badge-core"><i></i></span>
+              <strong id="heroBadgeName">COPPER I</strong>
+              <small id="heroBadgeProgress">0 / 500 RP</small>
+            </div>
+          </div>
+        </section>
+
+        <aside class="progress-card glass-card">
+          <div class="section-title"><div><small>RANK PROGRESS</small><h2 id="progressTitle">Copper I</h2></div><span id="accountStatePill" class="pill guest">GUEST</span></div>
+          <div class="progress-track"><i id="rankProgressBar"></i></div>
+          <div class="progress-labels"><span id="progressCurrent">0 RP</span><span id="progressNext">Copper II • 500 RP</span></div>
+          <div class="divider"></div>
+          <div class="stat-list">
+            <div><span>Best Score</span><b id="sideBestScore">0</b></div>
+            <div><span>Best Streak</span><b id="sideBestStreak">0</b></div>
+            <div><span>Lifetime Accuracy</span><b id="sideAccuracy">—</b></div>
+            <div><span>Avg. Reaction</span><b id="sideReaction">—</b></div>
+          </div>
+          <button id="sideAuthCta" class="link-btn">Create account to enter global leaderboard →</button>
+        </aside>
       </div>
-      <button id="startButton" class="primary-button"><span>START TRAINING</span><kbd>CLICK</kbd></button>
-      <div class="start-hint">ESC = Pause • Ziel anklicken = Punkt • Daneben klicken = Miss</div>
+
+      <section class="training-section">
+        <div class="section-heading-row">
+          <div><span class="eyebrow">TRAINING PROGRAMS</span><h2>Choose your drill</h2></div>
+          <div class="settings-inline"><label>SESSION <select id="duration"><option value="30">30s</option><option value="60" selected>60s</option><option value="90">90s</option><option value="120">120s</option></select></label><button id="settingsButton" class="icon-btn" title="Training Settings">⚙</button></div>
+        </div>
+        <div id="modeGrid" class="mode-grid">
+          <button class="mode-card selected" data-mode="flick"><span class="mode-icon icon-flick"><i></i><i></i><i></i></span><span class="mode-copy"><small>01 • PRECISION</small><b>REFLEX FLICK</b><em>Targets teleport after every hit. Train clean snap aim and reaction speed.</em></span><span class="difficulty">MEDIUM</span></button>
+          <button class="mode-card" data-mode="strafe"><span class="mode-icon icon-strafe"><i></i></span><span class="mode-copy"><small>02 • TRACKING</small><b>STRAFE LOCK</b><em>A moving target reverses direction and accelerates as your streak climbs.</em></span><span class="difficulty hard">HARD</span></button>
+          <button class="mode-card" data-mode="micro"><span class="mode-icon icon-micro"><i></i></span><span class="mode-copy"><small>03 • CONTROL</small><b>MICROSHOT</b><em>Small targets, short distances and tiny corrections for high precision.</em></span><span class="difficulty hard">HARD</span></button>
+          <button class="mode-card" data-mode="chaos"><span class="mode-icon icon-chaos"><i></i><i></i></span><span class="mode-copy"><small>04 • REACTION</small><b>CHAOS</b><em>Fast diagonal movement, random bounces and constant target pressure.</em></span><span class="difficulty insane">INSANE</span></button>
+        </div>
+      </section>
     </section>
 
-    <aside class="settings-panel panel">
-      <div class="panel-heading"><span>SETTINGS</span><span class="mini-label">MC STYLE</span></div>
-      <label class="setting"><div><span>Movement Speed</span><output id="speedValue">100%</output></div><input id="speed" type="range" min="50" max="200" value="100"><small>Wie schnell bewegliche Ziele sind.</small></label>
-      <label class="setting"><div><span>Target Lifetime</span><output id="lifetimeValue">2.5s</output></div><input id="lifetime" type="range" min="10" max="40" value="25"><small>Nur Flick: wann ein Ziel automatisch weiterspringt.</small></label>
-      <label class="setting"><div><span>Target Größe</span><output id="targetSizeValue">100%</output></div><input id="targetSize" type="range" min="65" max="150" value="100"></label>
-      <label class="setting"><div><span>Session</span><output id="durationValue">60s</output></div><input id="duration" type="range" min="15" max="120" step="15" value="60"></label>
-      <div class="best-box"><div><span>PERSONAL BEST</span><small id="bestMode">FLICK</small></div><strong id="bestScore">0</strong></div>
-    </aside>
+    <section id="view-leaderboard" class="view">
+      <div class="page-head"><div><span class="eyebrow">GLOBAL RANKING</span><h1>LEADERBOARD</h1><p>Nur Accounts erscheinen hier. Sortiert nach Tier und Rating Points.</p></div><div class="season-chip"><span>SEASON</span><b>01</b></div></div>
+      <div class="leader-layout">
+        <section class="leader-card glass-card">
+          <div class="leader-toolbar"><div class="search-box">⌕ <input id="leaderSearch" placeholder="Spieler suchen…" maxlength="20"></div><button id="refreshLeaderboard" class="icon-btn">↻</button></div>
+          <div class="leader-head row"><span>#</span><span>PLAYER</span><span>TIER</span><span>RP</span><span>BEST</span><span>ACC</span></div>
+          <div id="leaderRows" class="leader-rows"><div class="loading-row">Leaderboard wird geladen…</div></div>
+        </section>
+        <aside class="your-standing glass-card">
+          <small>YOUR STANDING</small><div id="standingBadge" class="rank-badge compact copper"><span class="badge-core"><i></i></span></div><h2 id="standingTier">Copper I</h2><b id="standingPosition">GUEST</b><p id="standingText">Erstelle einen Account, damit dein Rank global sichtbar wird.</p><button id="standingAccountBtn" class="primary-btn small">CREATE ACCOUNT</button>
+        </aside>
+      </div>
+    </section>
+
+    <section id="view-ranks" class="view"><div class="page-head"><div><span class="eyebrow">RANKED LADDER</span><h1>16 TIERS. ONE TOP.</h1><p>Jede abgeschlossene Session gibt RP. Schwierige Drills und starke Stats geben mehr.</p></div></div><div id="rankRoad" class="rank-road"></div></section>
   </main>
 
-  <section id="hud" class="hud" aria-hidden="true">
-    <div class="hud-top">
-      <div class="hud-stat"><small>SCORE</small><strong id="hudScore">0</strong></div>
-      <div class="hud-stat"><small>ACCURACY</small><strong id="hudAccuracy">100%</strong></div>
-      <div class="hud-stat"><small>CPS</small><strong id="hudCps">0.0</strong></div>
-      <div class="hud-mode"><small>MODE</small><strong id="hudMode">FLICK</strong></div>
-      <div class="hud-stat time"><small>TIME</small><strong id="hudTime">60.0</strong></div>
-    </div>
-    <div class="game-feed"><span id="streakText">STREAK ×0</span><span id="reactionText">REACTION —</span></div>
+  <section id="gameLayer" class="game-layer" aria-hidden="true">
+    <div class="game-world"><div class="sky-glow"></div><div class="block-horizon"></div><div class="grid-floor"></div><button id="target" class="mc-target" aria-label="Target"><span class="face-eye e1"></span><span class="face-eye e2"></span><span class="face-mouth"></span><span class="body-pixel p1"></span><span class="body-pixel p2"></span></button><div id="hitMarker" class="hit-marker">✦</div></div>
+    <div class="game-hud"><div class="hud-left"><div><small>SCORE</small><b id="hudScore">0</b></div><div><small>ACCURACY</small><b id="hudAccuracy">100%</b></div><div><small>REACTION</small><b id="hudReaction">—</b></div></div><div class="hud-center"><span id="hudMode">REFLEX FLICK</span><div class="crosshair"><i></i><i></i></div><b id="hudStreak">×0</b></div><div class="hud-right"><div><small>TIME</small><b id="hudTime">60.0</b></div><button id="pauseButton">Ⅱ</button></div></div>
+    <div class="hotbar"><span></span><span></span><span class="selected">⚔</span><span></span><span></span></div>
   </section>
 
-  <section id="pauseScreen" class="overlay-card" aria-hidden="true">
-    <div class="pause-card panel"><div class="eyebrow">TRAINING PAUSED</div><h2>PAUSE</h2><p>Deine Zeit läuft nicht weiter.</p><button id="resumeButton" class="primary-button">RESUME</button><button id="quitButton" class="ghost-button">BACK TO MENU</button></div>
-  </section>
+  <section id="pauseOverlay" class="modal-layer" aria-hidden="true"><div class="pause-panel modal-panel"><span class="eyebrow">SESSION PAUSED</span><h2>PAUSED</h2><p>Your run is frozen. Resume when you're ready.</p><button id="resumeButton" class="primary-btn">RESUME</button><button id="quitRunButton" class="secondary-btn">QUIT RUN</button></div></section>
 
-  <section id="resultsScreen" class="overlay-card" aria-hidden="true">
-    <div class="results-card panel">
-      <div class="eyebrow">SESSION COMPLETE</div><h2>RESULTS</h2><div class="grade" id="resultGrade">A</div>
-      <div class="results-grid">
-        <div><small>SCORE</small><strong id="resultScore">0</strong></div><div><small>ACCURACY</small><strong id="resultAccuracy">0%</strong></div>
-        <div><small>TARGETS</small><strong id="resultHits">0</strong></div><div><small>BEST STREAK</small><strong id="resultStreak">0</strong></div>
-        <div><small>AVG REACTION</small><strong id="resultReaction">—</strong></div><div><small>AVG CPS</small><strong id="resultCps">0.0</strong></div>
-      </div>
-      <div id="newBest" class="new-best">NEW PERSONAL BEST</div>
-      <div class="result-actions"><button id="retryButton" class="primary-button">RUN IT BACK</button><button id="menuButton" class="ghost-button">MENU</button></div>
-    </div>
-  </section>
+  <section id="resultOverlay" class="modal-layer" aria-hidden="true"><div class="result-panel modal-panel"><div class="result-top"><div><span class="eyebrow">SESSION COMPLETE</span><h2 id="resultTitle">REFLEX FLICK</h2></div><div id="resultGrade" class="grade">A</div></div><div class="result-stats"><div><small>SCORE</small><b id="resultScore">0</b></div><div><small>ACCURACY</small><b id="resultAccuracy">0%</b></div><div><small>HITS</small><b id="resultHits">0</b></div><div><small>BEST STREAK</small><b id="resultStreak">0</b></div><div><small>AVG REACTION</small><b id="resultReaction">—</b></div><div><small>RP GAIN</small><b id="resultRp" class="rp-gain">+0</b></div></div><div class="rank-result"><div id="resultRankGem" class="rank-gem copper big"></div><div><small id="resultRankLabel">CURRENT TIER</small><h3 id="resultRankName">Copper I</h3><div class="progress-track slim"><i id="resultProgress"></i></div><p id="resultProgressText">0 / 500 RP</p></div></div><div id="promotionBanner" class="promotion-banner">RANK UP • <b id="promotionRank">Copper II</b></div><div class="result-actions"><button id="retryButton" class="primary-btn">RUN IT BACK</button><button id="resultMenuButton" class="secondary-btn">BACK TO LAB</button></div></div></section>
 
-  <script src="state.js"></script>
-  <script src="settings.js"></script>
-  <script src="core.js"></script>
-  <script src="target-events.js"></script>
-  <script src="controls.js"></script>
-  <script src="results.js"></script>
-  <script src="loop.js"></script>
+  <section id="authOverlay" class="modal-layer" aria-hidden="true"><div class="auth-panel modal-panel"><button class="modal-close" data-close="authOverlay">×</button><div class="auth-brand"><span class="brand-cube"><i></i><i></i><i></i></span><div><small>AWAY AIM ID</small><h2 id="authHeading">Welcome back.</h2></div></div><div id="signedOutAuth"><div class="auth-tabs"><button class="active" data-auth-tab="login">LOGIN</button><button data-auth-tab="signup">CREATE ACCOUNT</button></div><form id="loginForm" class="auth-form active"><label>EMAIL<input id="loginEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label><label>PASSWORD<input id="loginPassword" type="password" autocomplete="current-password" required minlength="6" placeholder="••••••••"></label><button class="primary-btn" type="submit">LOGIN</button></form><form id="signupForm" class="auth-form"><label>USERNAME<input id="signupUsername" autocomplete="username" required minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" placeholder="Away23"></label><label>EMAIL<input id="signupEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label><label>PASSWORD<input id="signupPassword" type="password" autocomplete="new-password" required minlength="6" placeholder="Minimum 6 Zeichen"></label><button class="primary-btn" type="submit">CREATE ACCOUNT</button><p class="auth-note">Nach der Registrierung kann eine Bestätigungs-Mail kommen. Danach einfach wieder hier einloggen.</p></form><p id="authMessage" class="auth-message"></p></div><div id="signedInAuth" class="account-panel hidden"><div class="account-identity"><span id="profileAvatar" class="profile-avatar">A</span><div><small>LOGGED IN AS</small><h3 id="profileUsername">Player</h3><span id="profileEmail">—</span></div></div><div class="account-rank-row"><span id="profileRankGem" class="rank-gem copper big"></span><div><small>GLOBAL RANK</small><b id="profileTier">Copper I</b><span id="profileRp">0 RP</span></div></div><form id="renameForm" class="rename-form"><label>CHANGE USERNAME<input id="renameInput" maxlength="20" pattern="[A-Za-z0-9_]+"></label><button class="secondary-btn" type="submit">SAVE</button></form><button id="logoutButton" class="danger-btn">LOG OUT</button><p id="profileMessage" class="auth-message"></p></div></div></section>
+
+  <section id="settingsOverlay" class="modal-layer" aria-hidden="true"><div class="settings-panel modal-panel"><button class="modal-close" data-close="settingsOverlay">×</button><span class="eyebrow">TRAINING SETTINGS</span><h2>Fine tune your drill.</h2><label class="range-setting"><span>Movement Speed <b id="speedOut">100%</b></span><input id="speed" type="range" min="60" max="180" value="100"></label><label class="range-setting"><span>Target Size <b id="sizeOut">100%</b></span><input id="targetSize" type="range" min="55" max="135" value="100"></label><label class="range-setting"><span>Flick Lifetime <b id="lifetimeOut">2.0s</b></span><input id="lifetime" type="range" min="8" max="35" value="20"></label><p class="settings-note">Settings affect difficulty but RP gain is capped server-side.</p></div></section>
+
+  <div id="toastStack" class="toast-stack"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/ranks.js"></script><script src="js/backend.js"></script><script src="js/game.js"></script><script src="js/ui.js"></script>
 </body>
 </html>
