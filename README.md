@@ -11,9 +11,7 @@ Ein Minecraft-inspirierter Aim Trainer, der direkt im Browser läuft.
 ## Features
 
 - Score, Accuracy, CPS, Streak und Reaktionszeit
-- Einstellbare Bewegungsgeschwindigkeit
-- Einstellbare Zielgröße
-- Einstellbare Flick-Lifetime
+- Einstellbare Bewegungsgeschwindigkeit, Zielgröße und Flick-Lifetime
 - 15–120 Sekunden Sessions
 - Personal Best pro Modus via LocalStorage
 - Pause mit `ESC`
@@ -22,12 +20,16 @@ Ein Minecraft-inspirierter Aim Trainer, der direkt im Browser läuft.
 
 ## Lokal starten
 
-Einfach `index.html` im Browser öffnen oder einen kleinen lokalen Webserver verwenden.
+`index.html` im Browser öffnen oder einen lokalen Webserver verwenden.
 
-## GitHub Pages
+## GitHub Pages veröffentlichen
 
-Der enthaltene Workflow veröffentlicht die Seite automatisch über GitHub Pages, sobald auf `main` gepusht wird.
+GitHub erlaubt der verbundenen App nicht, Pages bei einem neuen Repository selbst zu aktivieren. Einmalig in GitHub:
 
-Geplante URL:
+1. `Settings` → `Pages`
+2. Unter **Build and deployment** als Source **GitHub Actions** auswählen
+3. Danach unter `Actions` den Workflow **Deploy GitHub Pages** manuell starten
+
+Danach ist die geplante URL:
 
 `https://away232323.github.io/AimTrainer/`
