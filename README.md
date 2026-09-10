@@ -1,35 +1,24 @@
-# Away Aim Trainer
+# Away Aim — Ranked Minecraft Aim Trainer
 
-Ein Minecraft-inspirierter Aim Trainer, der direkt im Browser läuft.
-
-## Modi
-
-- **Flick** – statische Ziele springen nach jedem Klick an eine neue Position.
-- **Strafe** – das Ziel bewegt sich seitlich und wird mit längeren Serien schneller.
-- **Combo** – freie Bewegung in X/Y für schwereres Tracking und Reaktionstraining.
+Browserbasierter Aim Trainer mit Account-System, globalem Leaderboard und 16-stufiger Ranked Ladder.
 
 ## Features
 
-- Score, Accuracy, CPS, Streak und Reaktionszeit
-- Einstellbare Bewegungsgeschwindigkeit, Zielgröße und Flick-Lifetime
-- 15–120 Sekunden Sessions
-- Personal Best pro Modus via LocalStorage
-- Pause mit `ESC`
-- Responsive Minecraft/PvP-inspiriertes UI
-- Keine Anmeldung und kein Backend nötig
+- Vier Drills: Reflex Flick, Strafe Lock, Microshot und Chaos
+- Score, Accuracy, Reaction, Streaks und Session Stats
+- Guest Progress via LocalStorage — kein Account nötig
+- E-Mail/Passwort Accounts über Supabase Auth
+- Globales Top-100 Leaderboard für Accounts
+- Server-seitige Run-Validierung und RP-Berechnung über Supabase Edge Function
+- Ranked Ladder: Copper I → Copper II → Copper III → Iron I → Iron II → Iron III → Gold I → Gold II → Gold III → Diamond I → Diamond II → Diamond III → Elite I → Elite II → Champion I → Master I
+- Responsive UI
 
-## Lokal starten
+## GitHub Pages
 
-`index.html` im Browser öffnen oder einen lokalen Webserver verwenden.
+Deployments laufen über GitHub Actions automatisch bei Pushes auf `main`.
 
-## GitHub Pages veröffentlichen
+URL: `https://away232323.github.io/AimTrainer/`
 
-GitHub erlaubt der verbundenen App nicht, Pages bei einem neuen Repository selbst zu aktivieren. Einmalig in GitHub:
+## Backend
 
-1. `Settings` → `Pages`
-2. Unter **Build and deployment** als Source **GitHub Actions** auswählen
-3. Danach unter `Actions` den Workflow **Deploy GitHub Pages** manuell starten
-
-Danach ist die geplante URL:
-
-`https://away232323.github.io/AimTrainer/`
+Das Frontend nutzt ausschließlich einen öffentlichen Supabase Publishable Key. Passwörter werden von Supabase Auth verarbeitet und nicht in diesem Repository gespeichert. Schreibzugriffe auf Ranked Stats erfolgen über eine JWT-geschützte Edge Function.
